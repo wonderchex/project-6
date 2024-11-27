@@ -27,6 +27,7 @@ public class DictionaryService {
     }
 
     public List<Entry> getWordsStartingWith(String value) {
+
         return DictionaryReference.getDictionary()
                                   .entrySet()
                                   .stream()
@@ -35,5 +36,37 @@ public class DictionaryService {
                                   .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
                                   .map(entry -> new Entry(entry.getKey(), entry.getValue()))
                                   .collect(Collectors.toList());
+    }
+
+    public List<Entry> getWordsThatContain(String value) {
+
+        return DictionaryReference.getDictionary()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getKey()
+                        .contains(value))
+                .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
+                .map(entry -> new Entry(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Entry> getWordsThatContainConsecutiveDoubleLetters() {
+
+        return DictionaryReference.getDictionary()
+                .entrySet()
+                .stream()
+                .filter(entry -> {
+
+                    String word = entry.getKey();
+                    for (int i = 0; i < word.length() - 1; i++) {
+                        if (word.charAt(i) == word.charAt(i + 1)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
+                .map(entry -> new Entry(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 }
