@@ -29,6 +29,7 @@ public class AggregatorRestClient {
         return result;
     }
 
+    @CircuitBreaker(name = "getWordsStartingWithCB", fallbackMethod = "fallbackGetWordsStartingWith")
     public List<Entry> getWordsStartingWith(String chars) {
 
         String uri = "http://localhost:9091/getWordsStartingWith/" + chars;
@@ -40,6 +41,7 @@ public class AggregatorRestClient {
                      .collect(Collectors.toList());
     }
 
+    @CircuitBreaker(name = "getWordsThatContainCB", fallbackMethod = "fallbackGetWordsThatContain")
     public List<Entry> getWordsThatContain(String chars) {
 
         String uri = "http://localhost:9091/getWordsThatContain/" + chars;
@@ -51,6 +53,7 @@ public class AggregatorRestClient {
                      .collect(Collectors.toList());
     }
 
+    @CircuitBreaker(name = "getWordsThatContainConsecutiveLettersCB", fallbackMethod = "fallbackGetWordsThatContainConsecutiveLetters")
     public List<Entry> getWordsThatContainConsecutiveLetters() {
 
         String uri = "http://localhost:9091/getWordsThatContainConsecutiveLetters";
@@ -64,7 +67,19 @@ public class AggregatorRestClient {
 
     // Fallback methods
     public Entry fallbackGetDefinitionFor(String word, Throwable t) {
-        return new Entry("Doh!","Definition not available");
+        return new Entry(); // Return a default Entry or handle the fallback logic
+    }
+
+    public List<Entry> fallbackGetWordsStartingWith(String chars, Throwable t) {
+        return Arrays.asList(new Entry()); // Return a default list or handle the fallback logic
+    }
+
+    public List<Entry> fallbackGetWordsThatContain(String chars, Throwable t) {
+        return Arrays.asList(new Entry()); // Return a default list or handle the fallback logic
+    }
+
+    public List<Entry> fallbackGetWordsThatContainConsecutiveLetters(Throwable t) {
+        return Arrays.asList(new Entry()); // Return a default list or handle the fallback logic
     }
 
 }
