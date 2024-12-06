@@ -1,6 +1,7 @@
 package com.example.aggregator.client;
 
 import com.example.aggregator.model.Entry;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +19,7 @@ public class AggregatorRestClient {
         this.restTemplate = restTemplate;
     }
 
+    @CircuitBreaker(name = "getDefinitionForCB", fallbackMethod = "fallbackGetDefinitionFor")
     public Entry getDefinitionFor(String word) {
 
         String uri = "http://localhost:9091/getWord/" + word;
@@ -60,6 +62,9 @@ public class AggregatorRestClient {
                      .collect(Collectors.toList());
     }
 
-
+    // Fallback methods
+    public Entry fallbackGetDefinitionFor(String word, Throwable t) {
+        return new Entry("Doh!","Definition not available");
+    }
 
 }
