@@ -13,10 +13,12 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+
 @Component
 public class DictionaryReference {
 
-    private static final Logger logger = LoggerFactory.getLogger(DictionaryReference.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryReference.class);
 
     private static Map<String, String> dictionary;
 
@@ -25,19 +27,14 @@ public class DictionaryReference {
         try {
             readDictionaryFile();
         } catch (JsonProcessingException e) {
-            logger.error("There was a problem reading the dictionary file");
+            logger.error("Error reading dictionary file", e);
         }
-    }
-
-    private DictionaryReference() {
-
     }
 
     private static void readDictionaryFile() throws JsonProcessingException {
 
         StopWatch sw = new StopWatch();
         sw.start();
-
         InputStream inputStream = DictionaryReference.class.getClassLoader()
                                                            .getResourceAsStream("dictionary.json");
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -51,18 +48,20 @@ public class DictionaryReference {
 
         sw.stop();
 
-        long milliseconds = sw.getLastTaskTimeMillis();
+        long millieseonds = sw.getLastTaskTimeMillis();
 
         String message = new StringBuilder().append("Dictionary created with ")
-                                            .append(dictionary.size())
-                                            .append(" entries in ")
-                                            .append(milliseconds)
-                                            .append("ms")
-                                            .toString();
+                .append(dictionary.size())
+                .append(" entries in ")
+                .append(millieseonds)
+                .append("ms")
+                .toString();
         logger.info(message);
-    }
 
+    }
     public static Map<String, String> getDictionary() {
         return DictionaryReference.dictionary;
     }
+
+
 }

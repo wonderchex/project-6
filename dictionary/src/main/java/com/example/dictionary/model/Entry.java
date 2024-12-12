@@ -31,7 +31,7 @@ public class Entry {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Entry {");
+        final StringBuilder sb = new StringBuilder("Entry{");
         sb.append("word='").append(word).append('\'');
         sb.append(", definition='").append(definition).append('\'');
         sb.append('}');
